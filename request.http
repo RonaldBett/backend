@@ -1,0 +1,25 @@
+###
+GET http://localhost:9000/api HTTP/1.1
+
+###
+POST http://localhost:9000/api HTTP/1.1
+content-Type: application/json
+
+{ 
+    "book_name":"Shinning",
+    "book_autor":"S King",
+    "book_editorial":"Planeta"
+}
+
+###
+DELETE http://localhost:9000/api/1 HTTP/1.1
+
+###
+PUT http://localhost:9000/api/2 HTTP/1.1
+content-Type: application/json
+
+{ 
+    "book_name":"It",
+    "book_autor":"S King",
+    "book_editorial":"Mundo"
+}

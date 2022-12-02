@@ -1,25 +1,113 @@
 ###
-GET http://localhost:9000/api HTTP/1.1
+GET http://localhost:9000/api/usuarios HTTP/1.1
 
 ###
-POST http://localhost:9000/api HTTP/1.1
+POST http://localhost:9000/api/usuarios HTTP/1.1
 content-Type: application/json
 
 { 
-    "book_name":"Shinning",
-    "book_autor":"S King",
-    "book_editorial":"Planeta"
+    "usu_email":"luis@gmail.com",
+    "usu_clave":"luis123",
+    "usu_nombres":"luis",
+    "usu_apellidos":"mejia"
 }
 
 ###
-DELETE http://localhost:9000/api/1 HTTP/1.1
-
-###
-PUT http://localhost:9000/api/2 HTTP/1.1
+PUT http://localhost:9000/api/usuarios/usu_id HTTP/1.1
 content-Type: application/json
 
 { 
-    "book_name":"It",
-    "book_autor":"S King",
-    "book_editorial":"Mundo"
+    "usu_id":1,
+    "usu_apellidos":"suarez"   
 }
+
+###
+DELETE http://localhost:9000/api/usuarios/usu_id/1 HTTP/1.1
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+###
+GET http://localhost:9000/api/deportes HTTP/1.1
+
+###
+POST http://localhost:9000/api/deportes HTTP/1.1
+content-Type: application/json
+
+{ 
+    "dep_nombre":"Futbol"
+}
+
+###
+PUT http://localhost:9000/api/deportes/dep_id HTTP/1.1
+content-Type: application/json
+
+{ 
+    "dep_id":1,
+    "dep_nombre":"Futsal"   
+}
+
+###
+DELETE http://localhost:9000/api/deportes/dep_id/1 HTTP/1.1
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+###
+GET http://localhost:9000/api/equipos HTTP/1.1
+
+###
+POST http://localhost:9000/api/equipos HTTP/1.1
+content-Type: application/json
+
+{ 
+    "equi_nombre":"Benfica"
+}
+
+###
+PUT http://localhost:9000/api/equipos/equi_id HTTP/1.1
+content-Type: application/json
+
+{ 
+    "equi_id":1,
+    "equi_nombre":"Benfica"   
+}
+
+###
+DELETE http://localhost:9000/api/equipos/equi_id/1 HTTP/1.1
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+###
+GET http://localhost:9000/api/marcadores HTTP/1.1
+
+###
+POST http://localhost:9000/api/marcadores HTTP/1.1
+content-Type: application/json
+
+{ 
+    "mar_fechaevento":"2022-10-11",
+    "mar_horaevento":"10:45",
+    "mar_fecharegistro":"2022-10-12",
+    "mar_horaregistro":"14:20",
+    "equi_id1":2,
+    "equi_id2":3,
+    "mar_marcadorequi1":5,
+    "mar_marcadorequi2":5,
+    "dep_id":2,
+    "usu_id":2
+}
+
+###
+PUT http://localhost:9000/api/equipos/equi_id HTTP/1.1
+content-Type: application/json
+
+{ 
+    "equi_id":1,
+    "equi_nombre":"Benfica"   
+}
+
+###
+DELETE http://localhost:9000/api/marcadores/mar_id/2 HTTP/1.1

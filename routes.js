@@ -1,61 +1,62 @@
-const express = require('express')
-const routes = express.Router()
+const express = require('express');
 
-//RUTA PARA GET (SELECT)
-routes.get('/', (req,res) => {
-    //res.send('ahora si viene el sel')
-    res.statusCode = 200;
-    req.getConnection((err,conn) => {
-        if(err) return res.send(err)
+const routes = express.Router();
 
-        conn.query('select * from books', (err, rows) => {
-            if(err) return res.send(err)
+//Definimos las api rest (las rutas que vamos a enviar a la app)
+routes.get('/:tabla', (req, res) => {
+  //Establecemos conexion con base de datos
+  req.getConnection((error, conexion) => {
+    if(error) return res.send(error);
+    var query = `SELECT * FROM ${req.params.tabla}`
 
-            res.json(rows)
-        });
-    })
-})
+    //Si no hay error de conexion, hacemos un query a la base de datos
+    conexion.query(query, (error, datos) => {
+      if(error) return res.send(error)
+      //Si no hay errores en el query, enviamos los datos al cliente
+      res.send(datos)
+    });
 
-//RUTA PARA POST (INSERT)
-routes.post('/', (req,res) => {
+  })
+});
 
-    req.getConnection((err,conn) => {
-        if(err) return res.send(err)
+routes.post('/:tabla', (req,res) => {
 
-        conn.query('insert into books set ?', [req.body], (err, rows) => {
-            if(err) return res.send(err)
+  req.getConnection((error,conexion) =>{
+    if(error) return res.send(error)
+    var query = `INSERT INTO ${req.params.tabla} set ?`
 
-            res.send('Agregado correctamente')
-        });
-    })
-})
+    conexion.query(query, [req.body], (error, datos) => {
+      if(error) return res.send(error)
+      res.send(req.body)
+    });
 
-//RUTA PARA DELETE (INSERT)
-routes.delete('/:id', (req,res) => {
+  });
+});
 
-    req.getConnection((err,conn) => {
-        if(err) return res.send(err)
+routes.put('/:tabla/:idname', (req, res) => {
 
-        conn.query('delete from books where book_id = ?', [req.params.id], (err, rows) => {
-            if(err) return res.send(err)
+  req.getConnection((error, conexion) => {
+    if(error) return res.send(error)
+    var query = `UPDATE ${req.params.tabla} set ? WHERE ${req.params.idname} = ${req.body[req.params.idname]}`
+  
+    conexion.query(query, [req.body], (error, datos) => {
+      if(error) return res.send(error)
+      res.send(req.body)
+    });
+  });
+});
 
-            res.send('Book deleted')
-        });
-    })
-})
+routes.delete('/:tabla/:idname/:id', (req, res) => {
 
-//RUTA PARA UPDATE (INSERT)
-routes.put('/:id', (req,res) => {
-        
-    req.getConnection((err,conn) => {
-        if(err) return res.send(err)
+  req.getConnection((error, conexion) => {
+    if(error) return res.send(error)
+    var query = `DELETE FROM ${req.params.tabla} WHERE ${req.params.idname} = ${req.params.id}`
 
-        conn.query('update books set ? where book_id = ?', [req.body, req.params.id], (err, rows) => {
-            if(err) return res.send(err)
-
-            res.send('Book updated')
-        });
-    })
-})
+    conexion.query(query, (error, datos) => {
+      if(error) return res.send(error)
+      res.send('Successfully deleted')
+    });
+  });
+});
 
 module.exports = routes;

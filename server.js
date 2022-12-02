@@ -1,31 +1,37 @@
-const express = require('express')
-const mysql = require('mysql')
-const myconn = require('express-myconnection')
-const routes = require('./routes.js')
+const express = require('express');
+const routes = require('./routes.js');
+const myconn = require('express-myconnection');
+const {mysql, dbOptions} = require('./connsql.js');
+const cors = require('cors');
 
-const app = express()
+//Creamos la app-servidor con express
+const app = express();
 
-app.set('port',9000)
+//Es una buena practica definir el puerto en las variables de la app
+app.set('port',9000);
 
-const dbOptions = {
-    host: 'localhost',
-    port: '3306',
-    user: 'root',
-    password: 'admin4490',
-    database: 'library'
-}
-
-/// middlewares
+//Establecemos la conexion de mysql con la app
 app.use(myconn(mysql, dbOptions, 'single'))
-app.use(express.json()) /// formato de entrega y de recepción
 
-//routes
-app.get('/', (req,res) => {
-    res.send('Welcome to my app')
+//app.use => Nos premite definir el formato de entrada y salida de datos, sin el metodo 'use' no funciona el 
+//post,put... correctamente 
+app.use(express.json())
+
+//Con el metodo listen encendemos el servidor, como primer argumento colocamos el puerto que 
+//queramos utilizar y en el segundo argumento podemos poner una funcion que se va a ejecutar 
+//cada vez que iniciemos el servidor
+app.listen(app.get('port'), () => {
+    console.log('Listening on port', app.get('port'))
+});
+
+//Metodo get (rest) sirve para enviar datos al cliente. El primer argumento es la ruta-endpoint a usar
+// y el 2do argumento es una funcion flecha con el request (datos que llegan desde el cliente) y el
+//response (datos que se envian al servidor como respuesta)
+app.get('/',(req, res) =>{
+    res.send("ruta raiz")
 })
 
-app.use('/api', routes)
+//Aqui establecemos las diferentes rutas utilizando un router, para mejorar el orden del codigo
+app.use('/api',routes);
 
-app.listen(app.get('port'),() =>{
-    console.log(`server running to port ${app.get('port')}`)
-});
+

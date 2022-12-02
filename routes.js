@@ -33,11 +33,11 @@ routes.post('/:tabla', (req,res) => {
   });
 });
 
-routes.put('/:tabla/:idname', (req, res) => {
+routes.put('/:tabla/:idname/:id', (req, res) => {
 
   req.getConnection((error, conexion) => {
     if(error) return res.send(error)
-    var query = `UPDATE ${req.params.tabla} set ? WHERE ${req.params.idname} = ${req.body[req.params.idname]}`
+    var query = `UPDATE ${req.params.tabla} set ? WHERE ${req.params.idname} = ${req.params.id}`
   
     conexion.query(query, [req.body], (error, datos) => {
       if(error) return res.send(error)

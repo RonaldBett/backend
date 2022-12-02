@@ -40,12 +40,12 @@ content-Type: application/json
 }
 
 ###
-PUT http://localhost:9000/api/deportes/dep_id HTTP/1.1
+PUT http://localhost:9000/api/deportes/dep_id/2 HTTP/1.1
 content-Type: application/json
 
 { 
-    "dep_id":1,
-    "dep_nombre":"Futsal"   
+    "dep_id":2,
+    "dep_nombre":"Futbol"   
 }
 
 ###

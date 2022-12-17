@@ -1,32 +1,31 @@
-const express = require('express');
-const routes = require('./routes.js');
-const myconn = require('express-myconnection');
-const {mysql, dbOptions} = require('./connsql.js');
-const cors = require('cors');
+const express=require('express')
+const mysql=require('mysql')
+const myconn =require('express-myconnection')
+const routes=require('./routes')
+const cors=require('cors')
 
-//Creamos la app-servidor con express
-const app = express();
-
-//Se define el puerto en las variables de la app
+const app=express()
+app.use(cors())
 app.set('port',9000);
 
-//Establecemos la conexion de mysql con la app
-app.use(myconn(mysql, dbOptions, 'single'))
-
-//app.use => Nos premite definir el formato de entrada y salida de datos
+const dbOptions={
+    host:'localhost',
+    port:'3306',
+    user:'root',
+    password:'admin4490',
+    database:'mdeportivos'
+}
+//middelwares
+app.use(myconn(mysql,dbOptions,'single'))
 app.use(express.json())
 
-//Con el metodo listen encendemos el servidor, como primer argumento colocamos el puerto 
-app.listen(app.get('port'), () => {
-    console.log('Listening on port', app.get('port'))
-});
+app.get('/',(req,res)=>{
+    res.send('Welcome to my APP');
 
-//Metodo get (rest) 
-app.get('/',(req, res) =>{
-    res.send("ruta raiz")
 })
+app.use('/api', routes)
 
-//Aqui establecemos las diferentes rutas utilizando un router, para mejorar el orden del codigo
-app.use('/api',routes);
-
+app.listen(app.get('port'),()=>{
+    console.log(`server running on port ${app.get('port')}`)
+})
 

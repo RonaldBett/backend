@@ -3,17 +3,18 @@ const mysql=require('mysql')
 const myconn =require('express-myconnection')
 const routes=require('./routes')
 const cors=require('cors')
+const {PORT_SERVER, HOST, PORT_DB, USER_DB, PWD_DB, NAME_DB} = require('./config.js')
 
 const app=express()
 app.use(cors())
-app.set('port',9000);
+app.set('port',PORT_SERVER);
 
 const dbOptions={
-    host:'localhost',
-    port:'3306',
-    user:'root',
-    password:'admin4490',
-    database:'mdeportivos'
+    host:HOST,
+    port:PORT_DB,
+    user:USER_DB,
+    password:PWD_DB,
+    database:NAME_DB
 }
 //middelwares
 app.use(myconn(mysql,dbOptions,'single'))

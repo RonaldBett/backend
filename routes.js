@@ -1,16 +1,44 @@
 const express = require('express');
 const routes = express.Router()
 
-routes.get('/:table',(req,res)=>{
-    //res.send('Ahora si viene el sel')
-    req.getConnection((err,conn)=>{
-        if(err) return res.send(err)
-        var ssql='select * from '+req.params.table
-        conn.query(ssql,(err,rows)=>{
-            if(err) return res.send(err)
-            res.json(rows)
-        })
+//RUTA PARA GET (SELECT)
+routes.get('/:table', (req, res) => {
+    res.statusCode = 200;
+    req.getConnection((err, conn) => {
+        if (err) return res.send(err)
+        var query = `select * from ${req.params.table}`
+        conn.query(query, (err, rows) => {
+            if (err) return res.send(err)
 
+            // Si el parametro table == marcadores hace una llamado a deportes y equipos
+            // y agrega esta informacion a la tabla marcadores
+            // para que en las tablas deportes y equipos se vea el objeto completo y no solo el id 
+            if (req.params.table == 'marcadores') {
+
+                var queryDeportes = 'select * from deportes'
+                conn.query(queryDeportes, (error, rowsDep) => {
+                    if (error) return res.send(error)
+
+                    rows.map(evento => {
+                        evento.dep_id = rowsDep.filter(deporte => deporte.dep_id == evento.dep_id)[0]
+                    })
+                })
+
+                var queryEquipos = 'select * from equipos'
+                conn.query(queryEquipos, (error, rowsEqui) => {
+                    if (error) return res.send(error)
+
+                    rows.map(evento => {
+                        evento.equi_id1 = rowsEqui.filter(equipos => equipos.equi_id == evento.equi_id1)[0]
+                        evento.equi_id2 = rowsEqui.filter(equipos => equipos.equi_id == evento.equi_id2)[0]
+                    })
+                    res.send(rows)
+                })
+
+            } else {
+                res.send(rows)
+            }
+        });
     })
 })
 
